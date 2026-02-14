@@ -11,6 +11,15 @@ class FilmPage extends StatefulWidget {
 
 class _FilmPageState extends State<FilmPage> {
   bool isFavorite = false;
+  bool isDescriptionExpanded = false;
+
+  final String filmDescription =
+      "Молодой и талантливый геймер Ян Марденборо мечтал стать настоящим гонщиком. "
+      "Его уникальные навыки в игре Gran Turismo привлекли внимание организаторов программы "
+      "GT Academy, которая даёт шанс виртуальным гонщикам пересесть за руль настоящих "
+      "болидов. Теперь Яну предстоит пройти через невероятные испытания, конкуренцию и "
+      "опасные гонки, чтобы доказать, что геймер может стать настоящим профессиональным "
+      "пилотом. Основано на реальных событиях.";
 
   void onAddFavorite() {
     setState(() {
@@ -26,6 +35,12 @@ class _FilmPageState extends State<FilmPage> {
         behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  void toggleDescription() {
+    setState(() {
+      isDescriptionExpanded = !isDescriptionExpanded;
+    });
   }
 
   @override
@@ -49,12 +64,14 @@ class _FilmPageState extends State<FilmPage> {
             ),
           ),
         ),
+
         Center(
           child: Text(
             "Gran Turismo",
             style: const TextStyle(fontSize: 44, fontWeight: FontWeight.bold),
           ),
         ),
+
         Center(
           child: IconButton(
             onPressed: onAddFavorite,
@@ -63,10 +80,49 @@ class _FilmPageState extends State<FilmPage> {
             iconSize: 40,
           ),
         ),
+
         const FilmRating(),
-        Builder(
-          builder: (context) => FilmSimilar(),
+
+        const SizedBox(height: 16),
+
+                Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Описание:",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                filmDescription,
+                maxLines: isDescriptionExpanded ? 200 : 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 16, height: 1.5),
+              ),
+              const SizedBox(height: 8),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: toggleDescription,
+                  child: Text(
+                    isDescriptionExpanded ? "Скрыть описание" : "Показать описание",
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.blue,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
+
+        Builder(builder: (context) => FilmSimilar()),
       ],
     );
   }
